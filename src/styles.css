@@ -61,6 +61,7 @@ html, body,
   }
   
   .modal-content {
+    position: relative;
     background: white;
   
     width: 80%;
@@ -71,6 +72,66 @@ html, body,
     padding: 20px;
     border-radius: 10px;
   }
+
+  .loading-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(255,255,255,0.55);
+
+    z-index: 500;
+
+}
+
+.spinner {
+
+  width: 55px;
+  height: 55px;
+
+  border: 6px solid #e0e0e0;
+  border-top: 6px solid #2b7cff;
+
+  border-radius: 50%;
+
+  animation: spin 0.9s linear infinite;
+
+}
+
+@keyframes spin {
+
+  from {
+      transform: rotate(0deg);
+  }
+
+  to {
+      transform: rotate(360deg);
+  }
+
+}
+
+
+.loading-box {
+
+  background: white;
+
+  padding: 20px 30px;
+
+  border-radius: 10px;
+
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+
+  font-size: 1.1rem;
+
+  font-weight: 500;
+
+}
   
   #close-modal {
     float: right;

@@ -27,3 +27,4 @@ export async function findLatestTif() {
 
   throw new Error("Could not find a recent TIFF.");
 }
+

@@ -1,4 +1,3 @@
-import L from "leaflet";
 import { addRasterLayer } from "../map/rasterLayer.js";
 import { createMap } from "../map/initMap.js";
 import { addBasinLayer } from "../map/basinLayer.js";
@@ -7,6 +6,7 @@ import { fetchRetrospective } from "../data/fetchRetrospective.js";
 import { drawHydrograph } from "../plots/hydrograph.js";
 import { plotCumulativeVolume } from "../plots/cumVol.js";
 import { drawFDC } from "../plots/fdc.js";
+import { plotHydroSOSBands } from "../plots/hydroSOSbands.js";
 
 export async function initApp() {
   const map = createMap();
@@ -42,41 +42,44 @@ document
       <p><strong>Link Number:</strong> ${props.LINKNO}</p>
     `;
 
-    document.getElementById("loading").style.display = "block";
-  
+    document.getElementById("loading").style.display = "flex";
+
+try {
+
     const data = await fetchRetrospective(props.LINKNO);
 
-    document.getElementById("loading").style.display = "none";
-  
-    const flowSeries = data[props.LINKNO];
+    const riverID = data.metadata.river_id;
+
+    const flowSeries = data[riverID];
     const dates = data.datetime;
-    
+
     const hydrographData = dates.map((date, i) => ({
-      date,
-      flow: flowSeries[i]
+        date,
+        flow: flowSeries[i]
     }));
+
     drawHydrograph(hydrographData);
     drawFDC(hydrographData);
     plotCumulativeVolume(data);
+    plotHydroSOSBands(data);
 
-    console.log(hydrographData.slice(0, 5));
-    console.log(props.LINKNO);
-    console.log(data.metadata.river_id);  
-  });
 }
 
-// export async function initApp() {
-//     const map = createMap();
-  
-//     const tifUrl =
-//       "http://geoglows-v2.s3-us-west-2.amazonaws.com/hydrosos/cogs/1990-06.tif";
-  
-//     try {
-//       const response = await fetch(tifUrl);
-  
-//       console.log("Status:", response.status);
-//       console.log("Content-Type:", response.headers.get("content-type"));
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   }
+
+catch (error) {
+
+    console.error(error);
+
+    alert("Unable to load basin data.");
+
+}
+
+finally {
+
+    document.getElementById("loading").style.display = "none";
+
+}
+
+});   // closes addBasinLayer()
+
+} 

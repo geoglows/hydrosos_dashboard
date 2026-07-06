@@ -9,11 +9,12 @@
 
     <div id="basin-modal" class="modal hidden">
       <div class="modal-content">
+        
 
         <button id="close-modal">&times;</button>
 
-        <div id="loading" style="display:none;">
-          Loading basin data...
+        <div id="loading" class="loading-overlay" style="display:none;">
+          <div class="spinner"></div>
         </div>
 
         <div id="basin-info"></div>
@@ -22,28 +23,16 @@
 
         <div id="cumulative-volume" style="height:500px;"></div>
 
+        <div id="hydrosos-bands" style="height:500px;"></div>
+
         <div id="fdc" style="height:400px;"></div>
 
       </div>
     </div>
 
   </div>
-</body>
-  <div id="basin-modal" class="modal hidden">
-
-    <div class="modal-content">
-  
-      <button id="close-modal">✕</button>
-  
-      <div id="basin-info"></div>
-  
-      <div id="hydrograph" style="height:400px;"></div>
-  
-      <div id="fdc" style="height:400px;"></div>
-  
-    </div>
-  
-  </div>
 
   <script type="module" src="/src/main.js"></script>
 </body>
+
+

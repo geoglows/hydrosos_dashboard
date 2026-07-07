@@ -6,6 +6,7 @@ import { fetchRetrospective } from "../data/fetchRetrospective.js";
 import { drawHydrograph } from "../plots/hydrograph.js";
 import { plotCumulativeVolume } from "../plots/cumVol.js";
 import { plotHydroSOSBands } from "../plots/hydroSOSbands.js";
+import { plotForecastEnvelope } from "../plots/forecastEnvelope.js";
 import { buildRecords } from "../utils/buildRecords.js";
 import { getHydroSOSData } from "../utils/getHydroSOSdata.js";
 import Plotly from "plotly.js-dist-min";
@@ -30,6 +31,9 @@ document
     Plotly.purge("cumulative-volume");
 
     Plotly.purge("hydrosos-bands");
+
+
+    Plotly.purge("forecast-envelope")
 
 
   });
@@ -78,6 +82,8 @@ plotHydroSOSBands(
     hydroSOSData.bands,
     hydroSOSData.currentYearMonthly
 );
+
+plotForecastEnvelope(data);
 
 }
 

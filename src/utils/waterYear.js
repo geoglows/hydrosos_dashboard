@@ -24,6 +24,7 @@ export function computeWaterYearCurves(records) {
 
         let cumulative = 0;
 
+        
         const days = [];
         const cumulativeVolume = [];
 

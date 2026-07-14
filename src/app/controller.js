@@ -1,14 +1,13 @@
 import { addRasterLayer } from "../map/rasterLayer.js";
 import { createMap } from "../map/initMap.js";
-import { addBasinLayer } from "../map/basinLayer.js";
 import { findLatestTif } from "../utils/findLatestTif.js";
 import { fetchRetrospective } from "../data/fetchRetrospective.js";
-import { drawHydrograph } from "../plots/hydrograph.js";
 import { plotCumulativeVolume } from "../plots/cumVol.js";
 import { plotHydroSOSBands } from "../plots/hydroSOSbands.js";
 import { plotForecastEnvelope } from "../plots/forecastEnvelope.js";
 import { buildRecords } from "../utils/buildRecords.js";
 import { getHydroSOSData } from "../utils/getHydroSOSdata.js";
+import {addBasinLayer,selectBasin} from "../map/basinLayer.js";
 import Plotly from "plotly.js-dist-min";
 
 export async function initApp() {
@@ -27,7 +26,6 @@ function closePanel() {
 
     document.getElementById("loading").style.display = "none";
 
-    Plotly.purge("hydrograph");
     Plotly.purge("cumulative-volume");
     Plotly.purge("hydrosos-bands");
     Plotly.purge("forecast-envelope");
@@ -58,69 +56,129 @@ modal.addEventListener("click", (event) => {
     "/outlet_lookup.json"
 ).then(r => r.json());
 
-  addBasinLayer(map, hydrobasins, async (feature) => {
-    document
-    .getElementById("basin-modal")
-    .classList.remove("hidden");
+// -------------------------------
+// Open a basin (used by BOTH clicks and search)
+// -------------------------------
 
-    const props = feature.properties;
+async function openBasin(feature) {
 
-    const riverID =
+  document
+      .getElementById("basin-modal")
+      .classList.remove("hidden");
+
+  const props = feature.properties;
+
+  const riverID =
       outletLookup[props.HYBAS_ID].riverID;
-  
-    document.getElementById("basin-info").innerHTML = `
+
+  document.getElementById("basin-info").innerHTML = `
       <h3>Basin Information</h3>
       <p><strong>Hydrobasin ID:</strong> ${props.HYBAS_ID}</p>
       <p><strong>Outlet River ID:</strong> ${riverID}</p>
-    `;
+  `;
 
-    document.getElementById("loading").style.display = "flex";
+  document.getElementById("loading").style.display = "flex";
 
-try {
+  try {
 
-  
-  const data =
-      await fetchRetrospective(riverID);
+      const data =
+          await fetchRetrospective(riverID);
 
-    const flowSeries = data[riverID];
-    const dates = data.datetime;
+      plotCumulativeVolume(data);
 
-    const hydrographData = dates.map((date, i) => ({
-        date,
-        flow: flowSeries[i]
-    }));
+      const records =
+          buildRecords(data);
 
-    drawHydrograph(hydrographData);
-    plotCumulativeVolume(data);
-    const records = buildRecords(data);
+      const hydroSOSData =
+          getHydroSOSData(records);
 
-const hydroSOSData =
-    getHydroSOSData(records);
+      plotHydroSOSBands(
 
-plotHydroSOSBands(
-    hydroSOSData.bands,
-    hydroSOSData.currentYearMonthly
+          hydroSOSData.bands,
+
+          hydroSOSData.currentYearMonthly
+
+      );
+
+      plotForecastEnvelope(data);
+
+  }
+
+  catch (error) {
+
+      console.error(error);
+
+      alert("Unable to load basin data.");
+
+  }
+
+  finally {
+
+      document.getElementById("loading").style.display = "none";
+
+  }
+
+}
+
+
+// -------------------------------
+// Add basin layer
+// -------------------------------
+
+addBasinLayer(
+  map,
+  hydrobasins,
+  openBasin
 );
 
-plotForecastEnvelope(data);
+
+// -------------------------------
+// Search
+// -------------------------------
+
+const searchBox =
+  document.getElementById("basin-search");
+
+const searchButton =
+  document.getElementById("search-button");
+
+
+function runSearch() {
+
+  const hybasID =
+      searchBox.value.trim();
+
+  const feature =
+      selectBasin(hybasID, map);
+
+  if (!feature) {
+
+      alert("HYBAS_ID not found.");
+
+      return;
+
+  }
+
+  openBasin(feature);
 
 }
 
 
-catch (error) {
+searchButton.addEventListener(
+  "click",
+  runSearch
+);
 
-    console.error(error);
 
-    alert("Unable to load basin data.");
+searchBox.addEventListener(
+  "keydown",
+  (event) => {
 
-}
+      if (event.key === "Enter") {
 
-finally {
+          runSearch();
 
-    document.getElementById("loading").style.display = "none";
+      }
 
-}
-
-});   // closes addBasinLayer()
-
-} 
+  }
+)};

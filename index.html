@@ -1,7 +1,7 @@
 <body>
   <div id="app">
 
-    <header id = "app-header">
+    <header id="app-header">
 
       <div class="header-left">
   
@@ -12,6 +12,20 @@
           >
   
           <h1>HydroSOS Dashboard</h1>
+  
+      </div>
+  
+      <div class="header-right">
+  
+          <input
+              id="basin-search"
+              type="text"
+              placeholder="Search HYBAS_ID..."
+          >
+  
+          <button id="search-button">
+              Search
+          </button>
   
       </div>
   
@@ -30,8 +44,6 @@
         </div>
 
         <div id="basin-info"></div>
-
-        <div id="hydrograph" style="height:400px;"></div>
 
         <div id="cumulative-volume" style="height:500px;"></div>
 

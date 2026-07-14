@@ -15,22 +15,34 @@ export function plotForecastEnvelope(data) {
     const curves =
         computeWaterYearCurves(records);
 
+    const today = new Date();
+
+    const currentWaterYear =
+    today.getUTCMonth() >= 9
+        ? today.getUTCFullYear() + 1
+        : today.getUTCFullYear();
+
+    const historicalCurves = curves
+    .filter(curve => curve.waterYear < currentWaterYear)
+    .sort((a, b) => a.waterYear - b.waterYear)
+    .slice(-30);
+
     const currentCurve =
         getCurrentWaterYearCurve(curves);
 
         const historicalForecasts =
-        getHistoricalForecastCurves(
-            curves,
-            currentCurve
-        );
+    getHistoricalForecastCurves(
+        historicalCurves,
+        currentCurve
+    );
 
     const forecast =
         computeForecastEnvelope(
             historicalForecasts
         );
 
-    const dailyBands =
-        computeDailyPercentileBands(curves);
+        const dailyBands =
+        computeDailyPercentileBands(historicalCurves);
 
         const currentVolume =
         currentCurve.cumulativeVolume.at(-1);
@@ -95,7 +107,7 @@ export function plotForecastEnvelope(data) {
             line: { width: 0 },
         
             showlegend: false,
-            
+
             hoverinfo: "skip"
         
         });
@@ -291,7 +303,7 @@ export function plotForecastEnvelope(data) {
         
             mode: "lines",
         
-            name: "Median Forecast",
+            name: "30-year Median Forecast",
         
             line: {
         
@@ -347,7 +359,7 @@ export function plotForecastEnvelope(data) {
             {
         
                 title:
-                    {text: "Three-Month Seasonal Outlook (Prototype)"},
+                    {text: "Three-Month Seasonal Outlook"},
         
                 xaxis: {
         

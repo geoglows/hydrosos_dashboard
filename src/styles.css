@@ -58,6 +58,38 @@ html, body,
   width: auto;
 
 }
+
+.header-right {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-right: 20px;
+
+}
+
+#basin-search {
+
+  width: 180px;
+
+  padding: 8px 10px;
+
+  border-radius: 6px;
+
+  border: 1px solid #bbb;
+
+}
+
+#search-button {
+
+  padding: 8px 14px;
+
+  cursor: pointer;
+
+}
   
   
   #map {

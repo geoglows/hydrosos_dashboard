@@ -17,7 +17,7 @@ export function plotHydroSOSBands(
     const p25 = bands.map(b => b.p25);
     const p75 = bands.map(b => b.p75);
     const p90 = bands.map(b => b.p90);
-    const p95 = bands.map(b => b.p95);
+    const p99 = bands.map(b => b.p99);
 
     
     const traces = [];
@@ -118,7 +118,7 @@ export function plotHydroSOSBands(
     traces.push({
 
         x: months,
-        y:p95,
+        y:p99,
     
         mode:"lines",
     

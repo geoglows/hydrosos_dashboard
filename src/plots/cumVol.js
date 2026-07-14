@@ -32,7 +32,19 @@ export function plotCumulativeVolume(data) {
         hoverinfo: "skip"
 
 }));
-    const median = computeMedianCurve(waterYearCurves);
+const today = new Date();
+
+const currentWaterYear =
+    today.getUTCMonth() >= 9
+        ? today.getUTCFullYear() + 1
+        : today.getUTCFullYear();
+
+const recentCurves = waterYearCurves
+    .filter(curve => curve.waterYear < currentWaterYear) // exclude current incomplete WY
+    .sort((a, b) => a.waterYear - b.waterYear)
+    .slice(-30);
+
+const median = computeMedianCurve(recentCurves);
 
 traces.push({
 
@@ -43,7 +55,7 @@ traces.push({
 
     mode: "lines",
 
-    name: "Median",
+    name: "30-year Median",
 
     line: {
         color: "#1f77b4",
@@ -51,13 +63,6 @@ traces.push({
     }
 
 });
-
-const today = new Date();
-
-const currentWaterYear =
-    today.getUTCMonth() >= 9
-        ? today.getUTCFullYear() + 1
-        : today.getUTCFullYear();
 
         const currentCurve = waterYearCurves.find(
             c => c.waterYear === currentWaterYear

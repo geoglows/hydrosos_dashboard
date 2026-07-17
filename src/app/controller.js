@@ -8,6 +8,7 @@ import {plotForecastEnvelope} from "../plots/forecastEnvelope.js";
 import {buildRecords} from "../utils/buildRecords.js";
 import {getHydroSOSData} from "../utils/getHydroSOSdata.js";
 import {addBasinLayer, selectBasin} from "../map/basinLayer.js";
+import { setupAccordion } from "../utils/setupAccordion.js";
 import Plotly from "plotly.js-dist-min";
 
 export async function initApp() {
@@ -88,6 +89,8 @@ export async function initApp() {
       );
 
       plotForecastEnvelope(data);
+
+      setupAccordion(); 
 
     } catch (error) {
 

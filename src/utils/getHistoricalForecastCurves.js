@@ -3,46 +3,35 @@ export function getHistoricalForecastCurves(
     currentCurve
 ) {
 
-    const today = new Date();
+    const startIndex =
+        currentCurve.cumulativeVolume.length - 1;
 
-    // Find today's position in the rolling window
-    const startIndex = currentCurve.dates.findIndex(
-        d => d >= today
-    );
+    return historicalCurves.map(curve => {
 
-    if (startIndex === -1) {
-        return [];
-    }
+        const dates =
+            curve.dates.slice(startIndex);
 
-    return historicalCurves
-        .map(curve => {
+        const cumulativeVolume =
+            curve.cumulativeVolume.slice(startIndex);
 
-            const dates = curve.dates.slice(startIndex);
+        const startVolume =
+            cumulativeVolume[0];
 
-            const cumulativeVolume =
-                curve.cumulativeVolume.slice(startIndex);
+        return {
 
-            const startVolume = cumulativeVolume[0];
+            year: curve.year,
 
-            const incrementalVolume =
-                cumulativeVolume.map(
-                    v => v - startVolume
-                );
+            dates,
 
-            return {
+            startVolume,
 
-                year: curve.year,
+            endVolume: cumulativeVolume.at(-1),
 
-                dates,
+            incrementalVolume:
+                cumulativeVolume.map(v => v - startVolume)
 
-                startVolume,
+        };
 
-                endVolume: cumulativeVolume.at(-1),
-
-                incrementalVolume
-
-            };
-
-        });
+    });
 
 }

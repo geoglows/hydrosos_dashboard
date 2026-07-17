@@ -45,13 +45,83 @@
 
         <div id="basin-info"></div>
 
-        <div id="cumulative-volume" style="height:500px;"></div>
+        <div class="accordion">
 
-        <div id="hydrosos-bands" style="height:500px;"></div>
+          <div class="accordion-item active">
+        
+            <button class="accordion-header">
 
-        <div id = "forecast-envelope" style = "height:500px;"></div>
+              <span class="accordion-title">
+                  <strong>Cumulative Volume</strong>
+          
+                  <div class="accordion-subtitle">
+                      Compare this year's cumulative runoff to the past 30 years.
+                  </div>
+              </span>
+          
+              <span class="accordion-arrow">&#9656;</span>
+          
+          </button>
+        
+            <div class="accordion-content">
+        
+              <div id="cumulative-volume" class="plot"></div>
+        
+            </div>
+        
+          </div>
+        
+        
+          <div class="accordion-item">
+        
+            <button class="accordion-header">
 
-      </div>
+              <span class="accordion-title">
+                  <strong>Monthly HydroSOS Status</strong>
+          
+                  <div class="accordion-subtitle">
+                      Monthly flow conditions relative to the past 30 years.
+                  </div>
+              </span>
+          
+              <span class="accordion-arrow">&#9656;</span>
+          
+          </button>
+        
+            <div class="accordion-content">
+        
+              <div id="hydrosos-bands" class="plot"></div>
+        
+            </div>
+        
+          </div>
+        
+        
+          <div class="accordion-item">
+        
+            <button class="accordion-header">
+
+              <span class="accordion-title">
+                  <strong>Seasonal Outlook</strong>
+          
+                  <div class="accordion-subtitle">
+                      Historical analogs show the likely range of cumulative runoff over the next three months.
+                  </div>
+              </span>
+          
+              <span class="accordion-arrow">&#9656;</span>
+          
+          </button>
+        
+            <div class="accordion-content">
+        
+              <div id="forecast-envelope" class="plot"></div>
+        
+            </div>
+        
+          </div>
+        
+        </div>
     </div>
 
   </div>

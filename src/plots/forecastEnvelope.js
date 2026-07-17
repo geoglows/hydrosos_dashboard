@@ -12,7 +12,7 @@ import { computeRollingWindowCurves } from "../utils/computeRollingWindowCurves.
 export function plotForecastEnvelope(data) {
 
     const records = buildRecords(data);
-
+   
     const rollingCurves =
     computeRollingWindowCurves(records);
 
@@ -40,11 +40,6 @@ export function plotForecastEnvelope(data) {
 
     const today = new Date();
 
-    const currentWaterYear =
-    today.getUTCMonth() >= 9
-        ? today.getUTCFullYear() + 1
-        : today.getUTCFullYear();
-
         const historicalCurves =
         cumulativeCurves
             .filter(c => c.year < today.getUTCFullYear())
@@ -56,10 +51,19 @@ export function plotForecastEnvelope(data) {
         c => c.year === today.getUTCFullYear()
     );
 
-        const historicalForecasts =
+    const lastObservedDate =
+    currentCurve.dates[currentCurve.cumulativeVolume.length - 1];
+
+    console.log(
+        "Last observed:",
+        lastObservedDate
+    );
+
+    const historicalForecasts =
     getHistoricalForecastCurves(
         historicalCurves,
-        currentCurve
+        currentCurve,
+        lastObservedDate
     );
 
     const forecast =
@@ -431,6 +435,19 @@ export function plotForecastEnvelope(data) {
             }
         
         );
+
+        console.log("Today:", today);
+console.log("Observed ends:", currentCurve.dates.at(-1));
+console.log("Forecast starts:", forecast.dates[0]);
+console.log("Current curve length:", currentCurve.dates.length);
+console.log(currentCurve.dates.slice(-10));
+console.log(forecast.dates.slice(0,10));
+console.log(
+    "Last observed date:",
+    currentCurve.dates[
+        currentCurve.cumulativeVolume.length - 1
+    ]
+);
 
       
 

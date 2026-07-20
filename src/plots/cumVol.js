@@ -2,6 +2,7 @@ import Plotly from "plotly.js-dist-min";
 import { computeRollingWindowCurves } from "../utils/computeRollingWindowCurves";
 import { buildRecords } from "../utils/buildRecords";
 import { computeMedianCurve } from "../utils/computeMedianCurve";
+import { formatVolume } from "../utils/formatVolume";
 
 export function plotCumulativeVolume(data) {
 
@@ -69,6 +70,8 @@ const recentCurves = cumulativeCurves
 
 const median = computeMedianCurve(recentCurves);
 
+
+
 traces.push({
 
     x: median.dates,
@@ -83,7 +86,11 @@ traces.push({
     line: {
         color: "#1f77b4",
         width: 4
-    }
+    },
+    hovertemplate:
+    "<b>Median:</b><br>" +
+    "%{y:.1f} billion m³" +
+    "<extra></extra>"
 
 });
 
@@ -107,7 +114,11 @@ traces.push({
                 line: {
                     color: "black",
                     width: 4
-                }
+                },
+                hovertemplate:
+                "<b>Current Year:</b><br>" +
+                "%{y:.1f} billion m³" +
+                "<extra></extra>"
         
             });
         
@@ -119,6 +130,8 @@ traces.push({
                 text: "Historical Cumulative Volume",
                 x: 0.5
             },
+
+            hovermode: "x unified",
         
             xaxis: {
 

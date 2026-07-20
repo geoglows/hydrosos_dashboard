@@ -68,35 +68,47 @@ export function plotForecastEnvelope(data) {
         const dailyBands =
         computeDailyPercentileBands(historicalCurves);
 
+        const scale = 1e9;
+
+    dailyBands.minimum = dailyBands.minimum.map(v => v == null ? null : v / scale);
+    dailyBands.p10     = dailyBands.p10.map(v => v == null ? null : v / scale);
+    dailyBands.p25     = dailyBands.p25.map(v => v == null ? null : v / scale);
+    dailyBands.p75     = dailyBands.p75.map(v => v == null ? null : v / scale);
+    dailyBands.p90     = dailyBands.p90.map(v => v == null ? null : v / scale);
+    dailyBands.maximum = dailyBands.maximum.map(v => v == null ? null : v / scale);
+
         const currentVolume =
         currentCurve.cumulativeVolume.at(-1);
+
+        const observedVolume =
+    currentCurve.cumulativeVolume.map(v => v / 1e9);
 
     const currentX =
         currentCurve.dates.at(-1);
 
         const forecastMedian =
         forecast.median.map(
-            v => currentVolume + v
+            v => (currentVolume + v) / 1e9
         );
 
     const forecastP25 =
         forecast.p25.map(
-            v => currentVolume + v
+            v => (currentVolume + v) / 1e9
         );
 
     const forecastP75 =
         forecast.p75.map(
-            v => currentVolume + v
+            v => (currentVolume + v) / 1e9
         );
 
     const forecastMin =
         forecast.minimum.map(
-            v => currentVolume + v
+            v => (currentVolume + v) / 1e9
         );
 
     const forecastMax =
         forecast.maximum.map(
-            v => currentVolume + v
+            v => (currentVolume + v) / 1e9
         );
 
 
@@ -136,7 +148,8 @@ export function plotForecastEnvelope(data) {
         
             line: { width: 0.5 },
         
-            name: "Very Dry"
+            name: "Very Dry",
+            hoverinfo: "skip"
         
         });
     
@@ -157,7 +170,9 @@ export function plotForecastEnvelope(data) {
             line: { color: "red",
                 width: 0.5 },
         
-            name: "Dry"
+            name: "Dry",
+
+            hoverinfo: "skip"
         
         });
     
@@ -177,7 +192,9 @@ export function plotForecastEnvelope(data) {
         
             line: { width: 0.5 },
         
-            name: "Normal"
+            name: "Normal",
+
+            hoverinfo: "skip"
         
         });
     
@@ -200,7 +217,9 @@ export function plotForecastEnvelope(data) {
             line: { color: "blue",
                 width: 0.5 },
         
-            name: "Wet"
+            name: "Wet",
+
+            hoverinfo: "skip"
         
         });
 
@@ -219,7 +238,9 @@ export function plotForecastEnvelope(data) {
         
             line: { width: 0.5 },
         
-            name: "Very Wet"
+            name: "Very Wet",
+
+            hoverinfo: "skip"
         
         });
 
@@ -230,6 +251,8 @@ export function plotForecastEnvelope(data) {
             x: forecast.dates,
         
             y: forecastMax,
+
+            name: "Historical Max",
         
             mode: "lines",
         
@@ -239,11 +262,11 @@ export function plotForecastEnvelope(data) {
                 dash: "dash"
             },
         
-            showlegend: false,
+            showlegend: true,
 
             hovertemplate:
-        "%{x|%b %d}<br>" +
-        "%{y:.2f} billion m³" +
+        "<b>Historical Max:</b><br>" +
+        "%{y:.1f} billion m³" +
         "<extra></extra>"
         
         });
@@ -264,11 +287,11 @@ export function plotForecastEnvelope(data) {
                 dash: "dash"
             },
         
-            name: "Historical Minimum",
+            name: "Historical Min",
 
             hovertemplate:
-        "%{x|%b %d}<br>" +
-        "%{y:.2f} billion m³" +
+        "<b>Historical Min:</b><br>" +
+        "%{y:.1f} billion m³" +
         "<extra></extra>"
         
         });
@@ -284,6 +307,8 @@ export function plotForecastEnvelope(data) {
             line: {
                 width: 0
             },
+
+            hoverinfo: "skip",
         
             showlegend: false
         
@@ -300,6 +325,8 @@ export function plotForecastEnvelope(data) {
             line: {
                 width: 0
             },
+
+            hoverinfo: "skip",
         
             showlegend: false
         
@@ -326,8 +353,8 @@ export function plotForecastEnvelope(data) {
             },
 
             hovertemplate:
-        "%{x|%b %d}<br>" +
-        "%{y:.2f} billion m³" +
+        "<b>Median:</b><br>" +
+        "%{y:.1f} billion m³" +
         "<extra></extra>"
         
         });
@@ -338,7 +365,7 @@ export function plotForecastEnvelope(data) {
 
             x: currentCurve.dates,
         
-            y: currentCurve.cumulativeVolume,
+            y: observedVolume,
         
             mode: "lines",
         
@@ -353,9 +380,9 @@ export function plotForecastEnvelope(data) {
             },
 
             hovertemplate:
-        "%{x|%b %d}<br>" +
-        "%{y:.2f} billion m³" +
-        "<extra></extra>"
+            "<b>Current Year:</b><br>" +
+            "%{y:.1f} billion m³" +
+            "<extra></extra>"
 
         
         });
@@ -370,6 +397,8 @@ export function plotForecastEnvelope(data) {
         
                 title:
                     {text: "Three-Month Seasonal Outlook"},
+
+                    hovermode: "x unified",
         
                 xaxis: {
         

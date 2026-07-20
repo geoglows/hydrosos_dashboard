@@ -56,7 +56,8 @@ export function plotHydroSOSBands(
             width:0
         },
     
-        name:"Very Dry"
+        name:"Very Dry",
+        hoverinfo: "skip"
     
     });
     
@@ -78,6 +79,8 @@ export function plotHydroSOSBands(
         line:{
             width:0
         },
+
+        hoverinfo: "skip",
     
         name:"Dry"
     
@@ -101,6 +104,8 @@ export function plotHydroSOSBands(
         line:{
             width:0
         },
+
+        hoverinfo: "skip",
     
         name:"Normal"
     
@@ -125,6 +130,8 @@ export function plotHydroSOSBands(
         line:{
             width:0
         },
+
+        hoverinfo: "skip",
     
         name:"Wet"
     
@@ -146,6 +153,8 @@ export function plotHydroSOSBands(
         line:{
             width:0
         },
+
+        hoverinfo: "skip",
     
         name:"Very Wet"
     
@@ -174,7 +183,11 @@ export function plotHydroSOSBands(
 
         marker:{
             size:8
-        }
+        },
+        hovertemplate:
+        "<b>Current Year:</b><br>" +
+        "%{y:.0f} m³/s" +
+        "<extra></extra>"
 
     });
 
@@ -184,6 +197,8 @@ export function plotHydroSOSBands(
         title: {
             text: "HydroSOS Monthly Flow Status"
         },
+
+        hovermode: "x unified",
     
         xaxis: {
             title: {

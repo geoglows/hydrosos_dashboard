@@ -1,5 +1,4 @@
-const BASE_URL =
-  "http://geoglows-v2.s3-us-west-2.amazonaws.com/hydrosos/cogs";
+const BASE_URL = "https://d2grb3c773p1iz.cloudfront.net/hydrosos/cogs";
 
 export async function findLatestTif() {
   const today = new Date();
@@ -27,4 +26,3 @@ export async function findLatestTif() {
 
   throw new Error("Could not find a recent TIFF.");
 }
-
